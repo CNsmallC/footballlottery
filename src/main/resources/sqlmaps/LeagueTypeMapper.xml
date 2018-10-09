@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.smallc.footballLottery.repository.ILeagueTypeRepository">
+
+    <select id="getByNickName" parameterType="String" resultType="LeagueType">
+        SELECT * FROM tb_leaguetype WHERE nickName = #{value}
+    </select>
+
+    <select id="getByLeagueName" parameterType="String" resultType="LeagueType">
+        SELECT * FROM tb_leaguetype WHERE leagueName = #{value}
+    </select>
+
+    <insert id="batchInsert" parameterType="list">
+        INSERT INTO tb_leaguetype (leagueName,nickName)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.leagueName},#{item.nickName})
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="LeagueType">
+        INSERT INTO tb_leaguetype (leagueName,nickName)
+        VALUES
+        (#{leagueTyp.leagueName},#{leagueTyp.nickName})
+    </insert>
+
+    <select id="get" parameterType="Integer" resultType="LeagueType">
+        SELECT * FROM tb_leaguetype WHERE ID = #{ID}
+    </select>
+
+</mapper>

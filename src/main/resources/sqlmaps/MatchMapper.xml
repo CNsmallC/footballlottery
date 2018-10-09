@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.smallc.footballLottery.repository.IMatchRepository">
+
+    
+    <resultMap id="MatchResultMap" type="cn.smallc.footballLottery.entity.Match">
+        <result property="matchCode" column="matchCode" />
+        <association property="scores" column="matchCode" select="cn.smallc.footballLottery.repository.IScoreRepository.getScoresByMatchCode"/>
+        <association property="leagueType" column="leagueTypeID" select="cn.smallc.footballLottery.repository.ILeagueTypeRepository.get"/>
+        <association property="homeTeam" column="homeTeamID" select="cn.smallc.footballLottery.repository.ITeamRepository.get"/>
+        <association property="awayTeam" column="homeTeamID" select="cn.smallc.footballLottery.repository.ITeamRepository.get"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Match">
+        <selectKey resultType="Integer" order="AFTER" keyProperty="ID">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+		Insert INTO tb_match (homeTeamID,awayTeamID,leagueTypeID,matchTime,endBuyTime,todayMatchID,isHot,matchCode,rq)
+		VALUES (#{homeTeam.ID},#{awayTeam.ID},#{leagueType.ID},#{matchTime},#{endBuyTime},#{todayMatchID},#{isHot},#{matchCode},#{rq})
+    </insert>
+
+    <select id="getAllMatchCode" parameterType="Match" resultType="String">
+        SELECT matchCode FROM tb_match
+    </select>
+
+    <insert id="batchInsert" parameterType="list" useGeneratedKeys="true" keyProperty="ID">
+        Insert INTO tb_match (homeTeamID,awayTeamID,leagueTypeID,matchTime,endBuyTime,todayMatchID,isHot,matchCode,rq)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+            (#{item.homeTeam.ID},#{item.awayTeam.ID},#{item.leagueType.ID},#{item.matchTime},#{item.endBuyTime}
+            ,#{item.todayMatchID},#{item.isHot},#{item.matchCode},#{item.rq})
+        </foreach>
+    </insert>
+
+    <select id="getMatchesByTime" resultMap="MatchResultMap">
+        SELECT * FROM tb_match WHERE matchTime &gt; #{startTime} AND matchTime &lt; #{endTime}
+    </select>
+
+
+
+
+
+</mapper>
