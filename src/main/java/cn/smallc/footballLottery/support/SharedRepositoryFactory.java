@@ -1,6 +1,7 @@
 package cn.smallc.footballLottery.support;
 
 import cn.smallc.footballLottery.repository.*;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,19 @@ public class SharedRepositoryFactory {
      */
     private static UserRepository userRepository;
 
+    /**
+     * 权限仓储
+     */
+    private static RoleRepository roleRepository;
+
+    public static RoleRepository getRoleRepository() {
+        return roleRepository;
+    }
+
+    @Autowired
+    public void setRoleRepository(RoleRepository roleRepository) {
+        SharedRepositoryFactory.roleRepository = roleRepository;
+    }
 
     public static UserRepository getUserRepository() {
         return userRepository;

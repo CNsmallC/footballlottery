@@ -1,13 +1,14 @@
 package cn.smallc.footballLottery.shiro;
 
 import cn.smallc.footballLottery.support.SharedRepositoryFactory;
+import cn.smallc.footballLottery.util.JWTUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,8 +18,18 @@ import java.util.Set;
  * @Date 2018/10/9
  * @Description
  */
+
+@Component
 public class CustomRealm extends AuthorizingRealm {
 
+
+    /**
+     * 必须重写此方法，不然会报错
+     */
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JWTToken;
+    }
 
     /**
      * 获取身份验证信息
@@ -30,15 +41,21 @@ public class CustomRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         System.out.println("————身份认证方法————");
-        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        // 从数据库获取对应用户名密码的用户
-        String password = SharedRepositoryFactory.getUserRepository().getPasswordByUsername(token.getUsername());
-        if (null == password) {
-            throw new AccountException("用户名不正确");
-        } else if (!password.equals(new String((char[]) token.getCredentials()))) {
-            throw new AccountException("密码不正确");
+        String token = (String) authenticationToken.getCredentials();
+        // 解密获得username，用于和数据库进行对比
+        String username = JWTUtil.getUsername(token);
+        if (username == null || !JWTUtil.verify(token, username)) {
+            throw new AuthenticationException("token认证失败！");
         }
-        return new SimpleAuthenticationInfo(token.getPrincipal(), password, getName());
+        String password = SharedRepositoryFactory.getUserRepository().getPasswordByUsername(username);
+        if (password == null) {
+            throw new AuthenticationException("该用户不存在！");
+        }
+//        int ban = userMapper.checkUserBanStatus(username);
+//        if (ban == 1) {
+//            throw new AuthenticationException("该用户已被封号！");
+//        }
+        return new SimpleAuthenticationInfo(token, token, "MyRealm");
     }
 
     /**
@@ -53,12 +70,12 @@ public class CustomRealm extends AuthorizingRealm {
         String username = (String) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         //获得该用户角色
-//        String role = userMapper.getRole(username);
-//        Set<String> set = new HashSet<>();
-//        //需要将 role 封装到 Set 作为 info.setRoles() 的参数
-//        set.add(role);
-//        //设置该用户拥有的角色
-//        info.setRoles(set);
+        String roleName = SharedRepositoryFactory.getRoleRepository().getRoleNameByUsername(username);
+        Set<String> RoleSet = new HashSet<>();
+        //需要将 role 封装到 Set 作为 info.setRoles() 的参数
+        RoleSet.add(roleName);
+        //设置该用户拥有的角色
+        info.setRoles(RoleSet);
         return info;
     }
 

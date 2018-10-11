@@ -9,5 +9,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface IRoleRepository extends IRepository<Role>{
 
+    String getRoleNameByUsername(@Param("username")String username);
 
 }

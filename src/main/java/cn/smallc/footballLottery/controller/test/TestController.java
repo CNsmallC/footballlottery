@@ -36,6 +36,33 @@ public class TestController extends MyController {
     }
 
 
+
+    @GetMapping(value = "/guest/enter")
+    public JsonResult login() {
+        return new JsonResult().successMsg("欢迎进入，您的身份是游客");
+    }
+
+
+
+    @GetMapping(value = "/guest/getMessage")
+    public JsonResult submitLogin() {
+        return new JsonResult().successMsg("您拥有获得该接口的信息的权限！");
+    }
+
+    @GetMapping(value = "/user/getMessage")
+    public JsonResult getUserMessage() {
+        return new JsonResult().successMsg("您拥有用户权限，可以获得该接口的信息！");
+    }
+
+    @GetMapping(value = "/admin/getMessage")
+    public JsonResult getAdminMessage() {
+        return new JsonResult().successMsg("您拥有管理员权限，可以获得该接口的信息！");
+    }
+
+
+
+
+
     @ApiOperation(value = "hw测试")
     @GetMapping("/")
     public String index(){

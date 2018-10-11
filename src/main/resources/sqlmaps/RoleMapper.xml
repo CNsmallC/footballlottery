@@ -3,8 +3,9 @@
 <mapper namespace="cn.smallc.footballLottery.repository.IRoleRepository">
 
     <select id="getRoleNameByUsername" parameterType="String" resultType="String">
-        SELECT roleName FROM tb_user u(
-
+        SELECT roleName FROM tb_role WHERE ID in(
+          SELECT roleID FROM re_user_role ur JOIN tb_user u
+          ON ur.userID = u.ID WHERE u.username = #{username}
         )
     </select>
 
