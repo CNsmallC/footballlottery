@@ -7,10 +7,9 @@ import cn.smallc.footballLottery.util.JWTUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * @Author smallC
@@ -50,6 +49,11 @@ public class LoginController extends MyController {
         } else {
             return JsonResult.success(JWTUtil.createToken(username),"登录成功");
         }
+    }
+
+    @RequestMapping(path = "/unauthorized/{message}")
+    public JsonResult unauthorized(@PathVariable String message) throws UnsupportedEncodingException {
+        return JsonResult.success(message);
     }
 
 

@@ -34,6 +34,10 @@ public class Match  implements IAggregateRoot {
     private int rq;
     @ApiModelProperty(value = "比分玩法赔率list")
     private List<Score> scores;
+    @ApiModelProperty(value = "赛果")
+    private MatchResult matchResult;
+
+
 
 //    @Override
 //    public String toString() {
@@ -51,6 +55,14 @@ public class Match  implements IAggregateRoot {
 //                "\n, scores=" + scores +
 //                '}';
 //    }
+
+    public MatchResult getMatchResult() {
+        return matchResult;
+    }
+
+    public void setMatchResult(MatchResult matchResult) {
+        this.matchResult = matchResult;
+    }
 
     public Date getEndBuyTime() {
         return endBuyTime;
