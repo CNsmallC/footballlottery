@@ -1,11 +1,13 @@
 package cn.smallc.footballLottery.entity;
 
+import cn.smallc.footballLottery.common.ientity.IAggregateRoot;
+
 /**
  * @Author smallC
  * @Date 2018/10/11
  * @Description
  */
-public class MatchResult {
+public class MatchResult implements IAggregateRoot {
 
     //比赛码
     private String matchCode;
@@ -48,7 +50,6 @@ public class MatchResult {
         if( homeTeamScore == awayTeamScore && homeTeamScore>=4 ){
             this.isDrawOther = true;
         }
-
 
     }
 

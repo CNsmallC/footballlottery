@@ -1,5 +1,6 @@
 package cn.smallc.footballLottery.support;
 
+import cn.smallc.footballLottery.entity.MatchResult;
 import cn.smallc.footballLottery.repository.*;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,20 @@ public class SharedRepositoryFactory {
      * 权限仓储
      */
     private static RoleRepository roleRepository;
+
+    /**
+     * 赛果仓储
+     */
+    private static MatchResultRepository matchResultRepository;
+
+    public static MatchResultRepository getMatchResultRepository() {
+        return matchResultRepository;
+    }
+
+    @Autowired
+    public void setMatchResultRepository(MatchResultRepository matchResultRepository) {
+        SharedRepositoryFactory.matchResultRepository = matchResultRepository;
+    }
 
     public static RoleRepository getRoleRepository() {
         return roleRepository;

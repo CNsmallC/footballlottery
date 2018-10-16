@@ -9,6 +9,7 @@
         <association property="leagueType" column="leagueTypeID" select="cn.smallc.footballLottery.repository.ILeagueTypeRepository.get"/>
         <association property="homeTeam" column="homeTeamID" select="cn.smallc.footballLottery.repository.ITeamRepository.get"/>
         <association property="awayTeam" column="awayTeamID" select="cn.smallc.footballLottery.repository.ITeamRepository.get"/>
+        <association property="matchResult" column="matchCode" select="cn.smallc.footballLottery.repository.IMatchResultRepository.getByMatchCode"/>
     </resultMap>
 
     <insert id="insert" parameterType="Match">

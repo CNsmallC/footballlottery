@@ -29,13 +29,14 @@ public class Match  implements IAggregateRoot {
     private Team homeTeam;
     @ApiModelProperty(value = "客队")
     private Team awayTeam;
-
     @ApiModelProperty(value = "让球数量")
     private int rq;
     @ApiModelProperty(value = "比分玩法赔率list")
     private List<Score> scores;
     @ApiModelProperty(value = "赛果")
     private MatchResult matchResult;
+    @ApiModelProperty(value = "是否有赛果")
+    private boolean hasMatchResult;
 
 
 
@@ -55,6 +56,13 @@ public class Match  implements IAggregateRoot {
 //                "\n, scores=" + scores +
 //                '}';
 //    }
+    public boolean isHasMatchResult() {
+    return hasMatchResult;
+}
+
+    public void setHasMatchResult(boolean hasMatchResult) {
+        this.hasMatchResult = hasMatchResult;
+    }
 
     public MatchResult getMatchResult() {
         return matchResult;
